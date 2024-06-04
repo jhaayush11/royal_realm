@@ -26,7 +26,7 @@ export function NavMenu() {
           <PlusIcon size={15} /> <span>Add Hotel</span>
         </DropdownMenuItem>
         <DropdownMenuItem className='cursor-pointer flex gap-2 items-center' onClick={() => route.push("/my-hotels")}>
-          <Hotel size={15} /> <span>Add Hotel</span>
+          <Hotel size={15} /> <span>My Hotels</span>
         </DropdownMenuItem>
         <DropdownMenuItem className='cursor-pointer flex gap-2 items-center' onClick={() => route.push("/my-bookings")}>
           <BookOpenCheck size={15}/><span>My Bookings</span>

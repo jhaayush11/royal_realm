@@ -11,6 +11,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Container from "@/components/Container";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,6 +51,7 @@ export default function RootLayout({
               </section>
             </main>
           </ThemeProvider>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
