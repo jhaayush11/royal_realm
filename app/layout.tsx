@@ -10,6 +10,7 @@ import {
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
+import Container from "@/components/Container";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,7 +45,9 @@ export default function RootLayout({
             <SignedIn>
               <UserButton />
             </SignedIn> */}
-              <section className="flex-grow">{children}</section>
+              <section className="flex-grow">
+                <Container>{children}</Container>
+              </section>
             </main>
           </ThemeProvider>
         </body>
