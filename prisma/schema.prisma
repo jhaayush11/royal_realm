@@ -57,10 +57,11 @@ model Room{
   breakFastPrice Int
   roomPrice Int
   roomService Boolean @default(false)
-  Tv Boolean @default(false)
+  TV Boolean @default(false)
   balcony Boolean @default(false)
   freeWifi Boolean @default(false)
   cityView Boolean @default(false)
+  oceanView Boolean @default(false)
   forestView Boolean @default(false)
   mountainView Boolean @default(false)
   airConditioned Boolean @default(false)

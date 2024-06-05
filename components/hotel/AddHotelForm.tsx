@@ -13,7 +13,7 @@ import { UploadButton } from "../uploadthing"
 import { useToast } from "../ui/use-toast"
 import Image from "next/image"
 import { Button } from "../ui/button"
-import { Eye, Loader2, PencilLine, TrashIcon, XCircle } from "lucide-react"
+import { Eye, Loader2, PencilLine, PlusIcon, Terminal, TrashIcon, XCircle } from "lucide-react"
 import axios from 'axios'
 import useLocation from "@/hooks/useLocations"
 import { ICity, IState } from "country-state-city"
@@ -26,6 +26,18 @@ import {
 } from "@/components/ui/select";
 import { getAllStates } from "country-state-city/lib/state"
 import { useRouter } from "next/navigation"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import AddRoomForm from "../room/AddRoomForm"
+import RoomCard from "../room/RoomCard"
+import { Separator } from "../ui/separator"
 
 
 interface AddHotelFormProps{
@@ -74,6 +86,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   const [cities, setCities] =useState<ICity[]>([])
   const [isLoading, setIsLoading] = useState(false);
   const [isHotelDeleting, setIsHotelDeleting] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const { toast } = useToast();
   const router = useRouter();
@@ -219,7 +232,10 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
       });
     }
   };
-
+ 
+  const handleDialogueOpen = () => {
+    setOpen(prev=>!prev)
+  }
   return (
     <div>
       <Form {...form}>
@@ -624,12 +640,34 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                   </FormItem>
                 )}
               />
+              {hotel && !hotel.rooms.length &&<Alert className="bg-green-500">
+                    <Terminal className="h-4 w-4 stroke-white" />
+                    <AlertTitle className="text-red-500">One Last Step Left!</AlertTitle>
+                    <AlertDescription>
+                  Your Hotel was created 🔥
+                  <div>Kindly add some rooms to complete your hotel setup</div>
+                    </AlertDescription>
+                  </Alert>
+                }
               <div className="flex justify-between gap-2 flex-wrap">
-                {hotel && <Button onClick={()=>handleDeleteHotel(hotel)} variant='ghost' type="button" className="max-w-[150px]" disabled={isHotelDeleting || isLoading}>
+                {hotel && <Button onClick={()=>handleDeleteHotel(hotel)} variant='outline' type="button" className="max-w-[150px] text-red-500" disabled={isHotelDeleting || isLoading}>
                   {isHotelDeleting? <><Loader2 className="mr-2 h-4 w-4" />Deleting</>:<><TrashIcon className="mr-2 h-4 w-4" />Delete</>}
                 </Button>}
                     
                 {hotel && <Button type='button' className="" variant='outline' onClick={()=>router.push(`/hotel-details/${hotel.id}`)}><Eye className="mr-2 h-4 w-4"/>View</Button>}
+                
+                {hotel && <Dialog open={open} onOpenChange={setOpen}>
+                  <DialogTrigger><Button type='button' variant='outline' className="max-w-[150px]"><PlusIcon className="mr-2 w-4 h-4"/>Add Room</Button></DialogTrigger>
+                  <DialogContent className="max-w-[900px] w-[90%]">
+                    <DialogHeader className="px-2"> 
+                      <DialogTitle>Add a room</DialogTitle>
+                      <DialogDescription>
+                        Add details about a room in your hotel.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <AddRoomForm hotel={hotel} handleDialogueOpen={handleDialogueOpen}  />
+                  </DialogContent>
+                </Dialog>}
 
                 {hotel ?
                   <Button className="max-w-[150px]" disabled={isLoading}>
@@ -638,7 +676,17 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                   {isLoading ? <><Loader2 className="mr-2 h-4 w-4" /> Creating</> : <><PencilLine className="mr-2 h-4 w-4" />Create Hotel</>}
                 </Button>}
               </div>
-            </div>
+              {hotel && hotel.rooms.length && <div>
+                <Separator />
+                <h3 className="text-lg font-semibold my-4">Hotel Rooms</h3>
+                <div className="grid grid-cols-1 2xl:grid-cols-2 gap-6">
+                  {hotel.rooms.map(room => {
+                    return <RoomCard key={room.id} hotel={hotel} room={room} />
+                  })}
+                </div>
+              </div>
+              }
+              </div>
           </div>
         </form>
       </Form>
